@@ -3,9 +3,11 @@ package scottsalvador.pons.com.sqliteact2;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DatabaseUtils;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 public class Helper extends SQLiteOpenHelper {
     final static String DBName = "Employee.db";
@@ -46,7 +48,24 @@ public class Helper extends SQLiteOpenHelper {
 
     public Cursor populateTable(){
         SQLiteDatabase db = this.getWritableDatabase();
-        return db.rawQuery("SELECT * FROM scores", null);
+        Log.d("ERROR","TABLE LANG");
+        if(isEmptyDB()){
+            Log.d("ERROR","TABLE IS EMPTY");
+            return null;
+        }
+        else{
+            Log.d("ERROR","TABLE IS NOT EMPTY");
+            return db.rawQuery("SELECT * FROM scores", null);
+        }
+    }
+
+    public boolean isEmptyDB(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        int NoOfRows = (int) DatabaseUtils.queryNumEntries(db,TableName);
+        if (NoOfRows == 0)
+            return true;
+        else
+            return false;
     }
 
     public boolean update(String id,String fname, String lname, int grade){
@@ -64,10 +83,6 @@ public class Helper extends SQLiteOpenHelper {
 
     public boolean delete(String id, String fname, String lname, int grade){
         SQLiteDatabase db = this.getReadableDatabase();
-        ContentValues cv = new ContentValues();
-        cv.put("Fname",fname);
-        cv.put("Lname",lname);
-        cv.put("Grade",grade);
         long deleted = db.delete(TableName,"ID=?",new String[]{id});
         if(deleted == -1)
             return false;
