@@ -48,4 +48,30 @@ public class Helper extends SQLiteOpenHelper {
         SQLiteDatabase db = this.getWritableDatabase();
         return db.rawQuery("SELECT * FROM scores", null);
     }
+
+    public boolean update(String id,String fname, String lname, int grade){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("Fname",fname);
+        cv.put("Lname",lname);
+        cv.put("Grade",grade);
+        long updated = db.update(TableName, cv,"ID=?",new String[]{id});
+        if(updated == -1)
+            return false;
+        else
+            return true;
+    }
+
+    public boolean delete(String id, String fname, String lname, int grade){
+        SQLiteDatabase db = this.getReadableDatabase();
+        ContentValues cv = new ContentValues();
+        cv.put("Fname",fname);
+        cv.put("Lname",lname);
+        cv.put("Grade",grade);
+        long deleted = db.delete(TableName,"ID=?",new String[]{id});
+        if(deleted == -1)
+            return false;
+        else
+            return true;
+    }
 }
