@@ -19,9 +19,13 @@ public class MainActivity extends AppCompatActivity {
 
         helper = new Helper(this);
         table = helper.populateTable();
+        table.moveToFirst();
         eFN = findViewById(R.id.eFN);
         eLN = findViewById(R.id.eLN);
         eGrade = findViewById(R.id.eGrade);
+        eFN.setText(table.getString(1));
+        eLN.setText(table.getString(2));
+        eGrade.setText(table.getString(3));
 
     }
 
