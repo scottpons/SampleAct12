@@ -64,11 +64,9 @@ public class MainActivity extends AppCompatActivity {
         String id = table.getString(0);
         boolean isDeleted = helper.delete(id,fname,lname,grade);
         if(isDeleted) {
-            if(!helper.isEmptyDB()){
-                table.moveToPrevious();
-                showData();
-            }
             table = helper.populateTable();
+            table.moveToFirst();
+            showData();
             Toast.makeText(this, "Record Deleted", Toast.LENGTH_LONG).show();
         }
         else
