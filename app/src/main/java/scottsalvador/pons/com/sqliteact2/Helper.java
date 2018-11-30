@@ -81,7 +81,7 @@ public class Helper extends SQLiteOpenHelper {
             return true;
     }
 
-    public boolean delete(String id, String fname, String lname, int grade){
+    public boolean delete(String id){
         SQLiteDatabase db = this.getReadableDatabase();
         long deleted = db.delete(TableName,"ID=?",new String[]{id});
         if(deleted == -1)

@@ -37,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isInserted = helper.insert(fname,lname,grade);
         if(isInserted) {
             table = helper.populateTable();
+            table.moveToFirst();
             Toast.makeText(this, "Record Inserted", Toast.LENGTH_LONG).show();
         }
         else
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         boolean isUpdated = helper.update(id,fname,lname,grade);
         if(isUpdated) {
             table = helper.populateTable();
+            table.moveToFirst();
             Toast.makeText(this, "Record Updated", Toast.LENGTH_LONG).show();
         }
         else
@@ -58,15 +60,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void deleteRecord(View v){
-        String fname = eFN.getText().toString().trim();
-        String lname = eLN.getText().toString().trim();
-        int grade = Integer.parseInt(eGrade.getText().toString().trim());
         String id = table.getString(0);
-        boolean isDeleted = helper.delete(id,fname,lname,grade);
+        boolean isDeleted = helper.delete(id);
         if(isDeleted) {
-            table = helper.populateTable();
-            table.moveToFirst();
-            showData();
+            if(!helper.isEmptyDB()){
+                table = helper.populateTable();
+                table.moveToFirst();
+                showData();
+            }
+            else{
+                setEmpty();
+                Toast.makeText(this, "No more records", Toast.LENGTH_LONG).show();
+            }
             Toast.makeText(this, "Record Deleted", Toast.LENGTH_LONG).show();
         }
         else
@@ -106,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                 table.moveToLast();
                 showData();
             }
-        else{
+            else{
                 table.moveToPrevious();
                 showData();
             }
@@ -132,5 +137,11 @@ public class MainActivity extends AppCompatActivity {
         eFN.setText(table.getString(1));
         eLN.setText(table.getString(2));
         eGrade.setText(table.getString(3));
+    }
+
+    public void setEmpty(){
+        eFN.setText("");
+        eLN.setText("");
+        eGrade.setText("");
     }
 }
